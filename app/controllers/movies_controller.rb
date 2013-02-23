@@ -7,11 +7,17 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if !params[:key].nil?
-	@class = "hilite"
-    else
-	@class = nil
+    if params[:key] == "title"
+	@title_class = "hilite"
+        @rd_class = nil
     end
+
+    if params[:key] == "release_date"
+	@title_class = nil
+	@rd_class = "hilite"
+    end
+ 
+    @all_ratings = Movie.all_ratings
     @movies = Movie.order(params[:key]).all
   end
 
