@@ -16,9 +16,15 @@ class MoviesController < ApplicationController
 	@title_class = nil
 	@rd_class = "hilite"
     end
- 
+
     @all_ratings = Movie.all_ratings
-    @movies = Movie.order(params[:key]).all
+    if params[:ratings].nil?
+        @filter = @all_ratings
+    else
+	@filter = params[:ratings].keys
+    end
+
+    @movies = Movie.find_all_by_rating(@filter, :order=>"#{params[:key]}")
   end
 
   def new
