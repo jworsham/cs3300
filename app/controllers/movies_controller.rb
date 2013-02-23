@@ -7,6 +7,11 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if !params[:key].nil?
+	@class = "hilite"
+    else
+	@class = nil
+    end
     @movies = Movie.order(params[:key]).all
   end
 
