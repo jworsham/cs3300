@@ -4,8 +4,8 @@
 %table#movies
   %thead
     %tr
-      %th Movie Title
-      %th Rating
+      %th#title_header= link_to "Movie Title", movies_path(:key => "title")
+      %th#release_date_header= link_to "Rating", movies_path(:key => "rating")
       %th Release Date
       %th More Info
   %tbody
