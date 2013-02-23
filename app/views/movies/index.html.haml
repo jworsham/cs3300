@@ -7,7 +7,7 @@
     = rating
     - is_checked = @filter.include?(rating) ? true : false
     = check_box_tag "ratings[#{rating}]", 'ratings_#{rating}', is_checked
-  = submit_tag 'Refresh'
+  = submit_tag 'Refresh', :id=>"ratings_submit"
 
 %table#movies
   %thead

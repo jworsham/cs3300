@@ -7,24 +7,56 @@ class MoviesController < ApplicationController
   end
 
   def index
+    #*
+    # The redirection variables at rating hash
+    r_key = nil
+    r_ratings = nil
+    redirect = nil
+    @all_ratings = Movie.all_ratings
+
+    #*
+    # If there is valid session variables saved, redirect with them
+    if ((session[:key] == "title" || session[:key] == "release_date") && !session[:rating].nil?)
+	redirect = true
+	r_key = session[:key]
+	r_ratings = session[:ratings]
+    end   
+ 
+    #*
+    # Set the correct sorting key and css class
     if params[:key] == "title"
 	@title_class = "hilite"
         @rd_class = nil
-    end
-
-    if params[:key] == "release_date"
+	r_key = params[:key]
+	session[:key] = params[:key]
+    elsif params[:key] == "release_date"
 	@title_class = nil
 	@rd_class = "hilite"
+	r_key = params[:key]
+	session[:key] = params[:key]
     end
 
-    @all_ratings = Movie.all_ratings
-    if params[:ratings].nil?
-        @filter = @all_ratings
-    else
+    #*
+    # Set the correct rating filter
+    if !params[:ratings].nil?
+	session[:ratings] = params[:ratings]
 	@filter = params[:ratings].keys
+    else
+	session[:ratings] = params[:ratings]
+	@filter = @all_ratings
     end
 
+    #*
+    # Now return the filtered, sorted movie list
     @movies = Movie.find_all_by_rating(@filter, :order=>"#{params[:key]}")
+
+    #*
+    # If there were valid session variables, redirect
+    # back to this function using those
+    if redirect == true
+	flash.keep
+	redirect_to :action=>'index', :key=>r_key, :ratings=>r_ratings
+    end
   end
 
   def new
